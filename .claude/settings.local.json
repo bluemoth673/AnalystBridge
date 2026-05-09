@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip show *)",
+      "Bash(python -c \"import json; d=json.load\\(open\\('sample_data/ransomware_demo.json'\\)\\); print\\('events:', len\\(d['events']\\), 'sample:', d['sample']['sample_id']\\)\")",
+      "Bash(python -c \"import pydantic; print\\('pydantic', pydantic.VERSION\\)\")",
+      "Bash(pip install *)",
+      "Bash(python -m pytest -q)",
+      "Bash(python -m analystbridge.cli ingest sample_data/ransomware_demo.json --reingest)",
+      "Bash(python -c \"from analystbridge.app import main; from analystbridge.main_window import MainWindow; print\\('GUI module imports OK'\\)\")",
+      "Bash(python -m analystbridge.cli samples)",
+      "Bash(python -m analystbridge.cli analyze --sample-id sample_ransomware_001)",
+      "Bash(python scripts/screenshot.py exports/ui_preview_dashboard.png)",
+      "Bash(set PYTHONPATH=.)",
+      "Bash(python scripts/screenshot.py)",
+      "Bash(python -m analystbridge.cli export --sample-id sample_ransomware_001)",
+      "Bash(python -c \"from pathlib import Path; [print\\(f'\\\\n===== {p.name} \\({p.stat\\(\\).st_size}B\\) ====='\\) or print\\(p.read_text\\(encoding='utf-8'\\)[:600]\\) for p in sorted\\(Path\\('exports/sample_ransomware_001'\\).iterdir\\(\\)\\)]\")",
+      "Bash(python -m pytest tests/test_ui_smoke.py -v)",
+      "Bash(python scripts/screenshot.py --offscreen)",
+      "Bash(python -c \"from pathlib import Path; print\\('\\\\n'.join\\(sorted\\(str\\(p.relative_to\\('.'\\)\\) for p in Path\\('analystbridge'\\).rglob\\('*.py'\\)\\)\\)\\)\")",
+      "Bash(python -c \"from pathlib import Path; print\\(Path\\('analystbridge/ui/right_panel.py'\\).stat\\(\\).st_size\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(ls \"C:\\\\Users\\\\Omar\\\\Desktop\\\\action reoport\\\\cc49d150e155326ec5c9063d5e206cb6-d07fc68fd5e168f7d266f401ebdb7bf9dd36e882\\\\\" 2>&1 | head -10)"
+    ]
+  }
+}
